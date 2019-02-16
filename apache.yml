@@ -1,0 +1,43 @@
+---
+
+- hosts: dbservers
+  become: yes
+  remote_user: vagrant
+  tasks:
+
+    - name: install apache2
+      apt:
+        update_cache: yes
+        name: apache2
+        state: present
+
+    - name: start apache2 server
+      service:
+        name: apache2
+        state: started
+  
+    - name: copy index.html file into webserver
+      copy:
+        src: index.html
+        dest: /var/www/html
+
+    - name: creating a file in remote machine
+      file:
+        name: file1
+        state: touch
+
+    - name: copying a file in /tmp location
+      copy:
+        src: /home/vagrant/file1
+        dest: /tmp
+        remote_src: yes
+
+    - name: create a file and change ownership
+      file:
+        name: /home/vagrant/data
+        state: touch
+        owner: root
+        mode: 0333
+
+
+
